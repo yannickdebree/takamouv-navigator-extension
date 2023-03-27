@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takamouv - Extension pour navigateur</title>
+</head>
+
+<body>
+    <form>
+        <h1>Takamouv - Extention pour navigateur</h1>
+        <h1>Informations personnelles</h1>
+        <div>
+            <button type="submit">Compléter les informations</button> sur la page <a target="_blank"
+            href="https://takamouv.fr/nos-evenements/training-du-samedi/">Training du Samedi</a>
+        </div>
+        <div>
+            <label for="lastName">Nom</label>
+            <input type="text" name="lastName" id="lastName" required>
+        </div>
+        <div>
+            <label for="firstName">Prénom</label>
+            <input type="text" name="firstName" id="firstName" required>
+        </div>
+        <div>
+            <label for="civility">Civilité</label>
+            <select name="civility" id="civility" required>
+                <option value="mrs">Madame</option>
+                <option value="mr">Monsieur</option>
+            </select>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+        </div>
+        <div>
+            <label for="address">Adresse</label>
+            <input type="text" name="address" id="address" required>
+        </div>
+        <div>
+            <label for="postalCode">Code postal</label>
+            <input type="text" name="postalCode" id="postalCode" required>
+        </div>
+        <div>
+            <label for="city">Ville</label>
+            <input type="text" name="city" id="city" required>
+        </div>
+        <div>
+            <label for="land">Pays</label>
+            <input type="text" name="land" id="land" required>
+        </div>
+        <div>
+            <label for="phoneNumber">Téléphone</label>
+            <input type="tel" name="phoneNumber" id="phoneNumber" required>
+        </div>
+        <div>
+            <label for="memberCode">Code adhérent</label>
+            <input type="text" name="memberCode" id="memberCode" required>
+        </div>
+        <div>
+            <label for="status">Vous êtes ?</label>
+            <select name="status" id="status" required>
+                <option value="individual">Un particulier</option>
+                <option value="organism">Un organisme</option>
+            </select>
+        </div>
+    </form>
+    <script src="./main.ts" type="module"></script>
+</body>
+
+</html>

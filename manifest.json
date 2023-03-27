@@ -1,0 +1,11 @@
+{
+    "name": "Takamouv - Extension pour navigateur",
+    "version": "1.0.0",
+    "description": "Extension pour navigateur dédié aux formulaires de l'école de danse Takamouv",
+    "manifest_version": 3,
+    "author": "Yannick Debrée",
+    "action":{
+        "default_popup": "dist/index.html",
+        "default_title": "Takamouv - Extension pour navigateur"
+    }
+}
