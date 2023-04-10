@@ -1,9 +1,10 @@
-import { ChangeDetectionQueue, Handler, HandlerNextCallback } from "../utils";
+import { ChangeDetectionQueue, Handler, HandlerNextCallback, StorageKeys, translateFormToDancerInformations } from "../../utils";
+import StorageService from "../storage.service";
 
-export default class FormChangesHandlerService implements Handler<unknown, void> {
-    constructor(private form: HTMLFormElement) { }
+export default class FormChangesHandlerService implements Handler<void, void> {
+    constructor(private form: HTMLFormElement, private storageService: StorageService) { }
 
-    handle(next: HandlerNextCallback<unknown, void>) {
+    handle(next: HandlerNextCallback<void, void>) {
         const changeDetectionQueue = new ChangeDetectionQueue<Event>({ debounceTime: 500 });
 
         this.form.addEventListener('change', event => {
@@ -22,16 +23,17 @@ export default class FormChangesHandlerService implements Handler<unknown, void>
         });
 
         changeDetectionQueue.onChangesDetected(() => {
-            next(void 0);
+            next();
         });
     }
 
     resolve() {
-        // TODO: uncomment
-        // const value = translateFormToDancerInformations(form);
-        // if (value instanceof Error) {
-        //     return value;
-        // }
-        // storageService.set(StorageKeys.formData, value);
+        const value = translateFormToDancerInformations(this.form);
+        if (value instanceof Error) {
+            return Promise.resolve(value);
+        }
+
+        this.storageService.set(StorageKeys.formData, value);
+        return Promise.resolve();
     }
 }

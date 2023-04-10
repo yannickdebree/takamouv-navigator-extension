@@ -1,9 +1,9 @@
-import { AutocompletionService, MonitoringService, StorageService } from "./services";
-import { fillFormIfNeeded, startHandlers, StorageKeys } from "./utils";
-import { getTabId } from "./chrome";
+import { MonitoringService, StorageService } from "./services";
+import { fillFormIfNeeded, startHandlers } from "./utils";
 import { MissingDomElementError } from "./errors";
 
-function main() {
+async function main() {
+    // TODO: check interfaces import
     const monitoringService = new MonitoringService(document, console);
 
     const form = document.querySelector('form');
@@ -17,22 +17,7 @@ function main() {
         return monitoringService.throwInternalError(fillFormResult);
     }
 
-    // TODO: move in a handler
-    const autocompletionService = new AutocompletionService(document);
-    form.addEventListener('submit', async event => {
-        event.preventDefault();
-        const dancerInformations = storageService.get(StorageKeys.formData);
-        if (dancerInformations) {
-            const tabId = await getTabId();
-            chrome.scripting.executeScript({
-                target: { tabId },
-                func: autocompletionService.autocompleteTrainingForm.bind(autocompletionService),
-                args: [dancerInformations]
-            });
-        }
-    });
-
-    const startHandlersResult = startHandlers(form);
+    const startHandlersResult = await startHandlers(storageService)(form);
     if (startHandlersResult instanceof Error) {
         return monitoringService.throwInternalError(startHandlersResult);
     }

@@ -39,11 +39,11 @@ export const translateFormToDancerInformations = (form: HTMLFormElement) => {
     const formData = new FormData(form);
 
     for (const key of Object.keys(data)) {
-        const value = formData.get(key)?.toString();
-        if (!value) {
-            return new Error(`"${key}" field is missing in form`);
+        const formElement = formData.get(key);
+        const value = formElement?.toString();
+        if (value) {
+            (data as any)[key] = value;
         }
-        (data as any)[key] = value;
     }
 
     return data;
