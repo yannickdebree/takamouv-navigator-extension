@@ -1,5 +1,5 @@
 {
-  "name": "takamouv-navigator-extension",
+  "name": "@takamouv/navigator-extension",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
