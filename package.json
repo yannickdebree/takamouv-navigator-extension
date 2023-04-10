@@ -5,9 +5,11 @@
   "license": "MIT",
   "scripts": {
     "serve": "vite",
-    "build": "vite build"
+    "build": "vite build --mode production && cp src/manifest.json dist/manifest.json"
   },
   "devDependencies": {
+    "bulma": "^0.9.4",
+    "sass": "^1.61.0",
     "typescript": "^5.0.2",
     "vite": "^4.2.1"
   }

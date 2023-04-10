@@ -6,69 +6,102 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Takamouv - Extension pour navigateur</title>
+    <link rel="stylesheet" href="./scss/main.scss">
 </head>
 
 <body>
-    <h1>Takamouv - Extention pour navigateur</h1>
-    <h2>Informations personnelles</h2>
-    <form>
-        <div>
-            <button type="submit">Compléter les informations</button> sur la page <a target="_blank"
-            href="https://takamouv.fr/nos-evenements/training-du-samedi/">Training du Samedi</a>
+    <main class="section">
+        <div class="block">
+            <h1 class="title">Takamouv - Extention pour navigateur</h1>
         </div>
-        <div>
-            <label for="lastName">Nom</label>
-            <input type="text" name="lastName" id="lastName" required>
+        <form class="block">
+            <div class="block">
+                <button class="button is-primary" type="submit">Auto-compléter</button><a class="button is-ghost"
+                    target="_blank" href="https://takamouv.fr/nos-evenements/training-du-samedi/"> la page Training du
+                    Samedi</a>
+            </div>
+            <h2 class="subtitle">Informations personnelles</h2>
+            <div class="columns">
+                <div class="column">
+                    <label class="label" for="civility">Civilité</label>
+                    <div class="control select">
+                        <select class="input" name="civility" id="civility" required>
+                            <option value="mrs">Madame</option>
+                            <option value="mr">Monsieur</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column">
+                    <label class="label" for="status">Vous êtes ?</label>
+                    <div class="control select">
+                        <select class="input" name="status" id="status" required>
+                            <option value="individual">Un particulier</option>
+                            <option value="organism">Un organisme</option>
+                        </select>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label" for="lastName">Nom</label>
+                    <div class="control">
+                        <input class="input" type="text" name="lastName" id="lastName" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="firstName">Prénom</label>
+                    <div class="control">
+                        <input class="input" type="text" name="firstName" id="firstName" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="email">Email</label>
+                    <div class="control">
+                        <input class="input" type="email" name="email" id="email" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="address">Adresse</label>
+                    <div class="control">
+                        <input class="input" type="text" name="address" id="address" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="postalCode">Code postal</label>
+                    <div class="control">
+                        <input class="input" type="text" name="postalCode" id="postalCode" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="city">Ville</label>
+                    <div class="control">
+                        <input class="input" type="text" name="city" id="city" required>
+                    </div>
+            </div>
+            <div class="field">
+                <label class="label" for="country">Pays</label>
+                <div class="control">
+                    <input class="input" type="text" name="country" id="country" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="phoneNumber">Téléphone</label>
+                <div class="control">
+                    <input class="input" type="tel" name="phoneNumber" id="phoneNumber" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="memberCode">Code adhérent</label>
+                <div class="control">
+                    <input class="input" type="text" name="memberCode" id="memberCode" required>
+                </div>
+            </div>
+            </form>
+        <div class="block">
+            <button class="button is-danger" id="trim-trigger">Vider le formulaire</button>
         </div>
-        <div>
-            <label for="firstName">Prénom</label>
-            <input type="text" name="firstName" id="firstName" required>
-        </div>
-        <div>
-            <label for="civility">Civilité</label>
-            <select name="civility" id="civility" required>
-                <option value="mrs">Madame</option>
-                <option value="mr">Monsieur</option>
-            </select>
-        </div>
-        <div>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" required>
-        </div>
-        <div>
-            <label for="address">Adresse</label>
-            <input type="text" name="address" id="address" required>
-        </div>
-        <div>
-            <label for="postalCode">Code postal</label>
-            <input type="text" name="postalCode" id="postalCode" required>
-        </div>
-        <div>
-            <label for="city">Ville</label>
-            <input type="text" name="city" id="city" required>
-        </div>
-        <div>
-            <label for="country">Pays</label>
-            <input type="text" name="country" id="country" required>
-        </div>
-        <div>
-            <label for="phoneNumber">Téléphone</label>
-            <input type="tel" name="phoneNumber" id="phoneNumber" required>
-        </div>
-        <div>
-            <label for="memberCode">Code adhérent</label>
-            <input type="text" name="memberCode" id="memberCode" required>
-        </div>
-        <div>
-            <label for="status">Vous êtes ?</label>
-            <select name="status" id="status" required>
-                <option value="individual">Un particulier</option>
-                <option value="organism">Un organisme</option>
-            </select>
-        </div>
-        <button id="trim-trigger">Vider le formulaire</button>
-    </form>
-    <script src="./main.ts" type="module"></script>
+        </main>
+        <script src="./app/main.ts" type="module"></script>
 </body>
 
 </html>
