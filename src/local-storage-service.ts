@@ -1,27 +1,28 @@
-import { Civility, FormData, Status } from "./types";
+import { DancerInformations } from "./types";
 
 interface LocalStorageItems {
-    "form-data": FormData;
+    "form-data": DancerInformations;
 }
 
-function formatLocalStorageItemKey(key: keyof LocalStorageItems) {
+const formatLocalStorageItemKey = (key: keyof LocalStorageItems) => {
     const localStoragePrefix = 'takamouv';
     return `${localStoragePrefix}_${key}`;
 }
 
-function parseStringToFormData(str: string): FormData {
-    // TODO: implement
+const parseStringToFormData = (str: string): DancerInformations => {
+    const { lastName, firstName, address, postalCode, city, country, civility, email, memberCode, phoneNumber, status } = JSON.parse(str);
     return {
-        lastName: '',
-        firstName: '',
-        address: '',
-        city: '',
-        country: '',
-        civility: Civility.MR,
-        email: '',
-        memberCode: '',
-        phoneNumber: '',
-        status: Status.individual
+        lastName,
+        firstName,
+        address,
+        city,
+        country,
+        postalCode,
+        civility,
+        email,
+        memberCode,
+        phoneNumber,
+        status
     }
 }
 
@@ -43,5 +44,10 @@ export default class LocalStorageService {
     set<K extends keyof LocalStorageItems>(key: K, value: LocalStorageItems[K]) {
         const formatedKey = formatLocalStorageItemKey(key);
         return localStorage.setItem(formatedKey, btoa(JSON.stringify(value)));
+    }
+
+    delete<K extends keyof LocalStorageItems>(key: K) {
+        const formatedKey = formatLocalStorageItemKey(key);
+        return localStorage.removeItem(formatedKey);
     }
 }

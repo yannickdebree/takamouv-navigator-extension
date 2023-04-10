@@ -1,19 +1,20 @@
 export enum Civility {
-    MRS,
-    MR
+    MRS = 'mrs',
+    MR = 'mr'
 }
 
 export enum Status {
-    individual,
-    organism
+    individual = 'individual',
+    organism = 'organism'
 }
 
-export type FormData = {
+export type DancerInformations = {
     lastName: string;
     firstName: string;
     civility: Civility;
     email: string;
     address: string;
+    postalCode: string;
     city: string;
     country: string;
     phoneNumber: string;

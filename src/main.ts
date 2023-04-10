@@ -1,20 +1,25 @@
 import ChangeDetectionQueue from "./change-detection-queue";
-import { fillFormFromData, translateFormToFormData } from "./form";
+import { fillFormFromData, translateFormToDancerInformations } from "./form";
 import LocalStorageService from "./local-storage-service";
 
-function main(){
+const throwInternalError = (error: Error) => {
+    document.body.innerText = 'Une erreur interne est survenue. Veuillez contacter l\'administrateur de cette extension.';
+    console.warn(error);
+}
+
+const main = () => {
     const form = document.querySelector('form');
 
-    if(!form){
+    if (!form) {
         return new Error('"form" element is missing in DOM.');
     }
 
     const localStorageService = new LocalStorageService();
     const formDataLocalStorageKey = 'form-data';
 
-    const formData = localStorageService.get(formDataLocalStorageKey);
-    if (formData) {
-        fillFormFromData(form, formData);
+    const dancerInformations = localStorageService.get(formDataLocalStorageKey);
+    if (dancerInformations) {
+        fillFormFromData(form)(dancerInformations);
     }
 
     form.addEventListener('submit', event => {
@@ -23,12 +28,7 @@ function main(){
         console.log('TODO: implement submit');
     });
 
-
     const changeDetectionQueue = new ChangeDetectionQueue<Event>({ debounceTime: 500 });
-    changeDetectionQueue.onChangesDetected(() => {
-        const value = translateFormToFormData(form);
-        localStorageService.set(formDataLocalStorageKey, value);
-    });
 
     form.addEventListener('change', event => {
         if (!(event.target instanceof HTMLSelectElement)) {
@@ -44,6 +44,24 @@ function main(){
         }
         return changeDetectionQueue.registerChangeDetection(event);
     });
+
+    changeDetectionQueue.onChangesDetected(() => {
+        const value = translateFormToDancerInformations(form);
+        if (value instanceof Error) {
+            throwInternalError(value);
+            return;
+        }
+        localStorageService.set(formDataLocalStorageKey, value);
+    });
+
+    const trimButton = form.querySelector<HTMLButtonElement>('#trim-trigger');
+    trimButton?.addEventListener('click', () => {
+        form.reset();
+        localStorageService.delete(formDataLocalStorageKey);
+    });
 }
 
-main();
+const result = main();
+if (result instanceof Error) {
+    throwInternalError(result);
+}
