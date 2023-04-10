@@ -1,67 +1,41 @@
-import ChangeDetectionQueue from "./change-detection-queue";
-import { fillFormFromData, translateFormToDancerInformations } from "./form";
-import LocalStorageService from "./local-storage-service";
+import { AutocompletionService, MonitoringService, StorageService } from "./services";
+import { fillFormIfNeeded, startHandlers, StorageKeys } from "./utils";
+import { getTabId } from "./chrome";
+import { MissingDomElementError } from "./errors";
 
-const throwInternalError = (error: Error) => {
-    document.body.innerText = 'Une erreur interne est survenue. Veuillez contacter l\'administrateur de cette extension.';
-    console.warn(error);
-}
+function main() {
+    const monitoringService = new MonitoringService(document, console);
 
-const main = () => {
     const form = document.querySelector('form');
-
     if (!form) {
-        return new Error('"form" element is missing in DOM.');
+        return monitoringService.throwInternalError(new MissingDomElementError('form'));
     }
 
-    const localStorageService = new LocalStorageService();
-    const formDataLocalStorageKey = 'form-data';
-
-    const dancerInformations = localStorageService.get(formDataLocalStorageKey);
-    if (dancerInformations) {
-        fillFormFromData(form)(dancerInformations);
+    const storageService = new StorageService(localStorage);
+    const fillFormResult = fillFormIfNeeded(storageService)(form);
+    if (fillFormResult instanceof Error) {
+        return monitoringService.throwInternalError(fillFormResult);
     }
 
-    form.addEventListener('submit', event => {
+    // TODO: move in a handler
+    const autocompletionService = new AutocompletionService(document);
+    form.addEventListener('submit', async event => {
         event.preventDefault();
-        // TODO: implement
-        console.log('TODO: implement submit');
-    });
-
-    const changeDetectionQueue = new ChangeDetectionQueue<Event>({ debounceTime: 500 });
-
-    form.addEventListener('change', event => {
-        if (!(event.target instanceof HTMLSelectElement)) {
-            return;
+        const dancerInformations = storageService.get(StorageKeys.formData);
+        if (dancerInformations) {
+            const tabId = await getTabId();
+            chrome.scripting.executeScript({
+                target: { tabId },
+                func: autocompletionService.autocompleteTrainingForm.bind(autocompletionService),
+                args: [dancerInformations]
+            });
         }
-        return changeDetectionQueue.registerChangeDetection(event);
     });
 
-    form.addEventListener('keydown', (event: KeyboardEvent) => {
-        const keyDownCodeBlackList = ['Tab', 'Space', 'ShiftLeft', 'ShiftRight'];
-        if (keyDownCodeBlackList.includes(event.code)) {
-            return;
-        }
-        return changeDetectionQueue.registerChangeDetection(event);
-    });
-
-    changeDetectionQueue.onChangesDetected(() => {
-        const value = translateFormToDancerInformations(form);
-        if (value instanceof Error) {
-            throwInternalError(value);
-            return;
-        }
-        localStorageService.set(formDataLocalStorageKey, value);
-    });
-
-    const trimButton = form.querySelector<HTMLButtonElement>('#trim-trigger');
-    trimButton?.addEventListener('click', () => {
-        form.reset();
-        localStorageService.delete(formDataLocalStorageKey);
-    });
+    const startHandlersResult = startHandlers(form);
+    if (startHandlersResult instanceof Error) {
+        return monitoringService.throwInternalError(startHandlersResult);
+    }
 }
 
-const result = main();
-if (result instanceof Error) {
-    throwInternalError(result);
-}
+main();
