@@ -16,7 +16,6 @@ export type DancerInformations = {
     address: string;
     postalCode: string;
     city: string;
-    country: string;
     phoneNumber: string;
     memberCode: string;
     status: Status;

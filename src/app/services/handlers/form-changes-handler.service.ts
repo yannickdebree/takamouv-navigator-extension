@@ -1,8 +1,7 @@
-import { ChangeDetectionQueue, Handler, HandlerNextCallback, StorageKeys, translateFormToDancerInformations } from "../../utils";
-import StorageService from "../storage.service";
+import { ChangeDetectionQueue, Handler, HandlerNextCallback, StorageKeys, StorageProxy, translateFormToDancerInformations } from "../../utils";
 
 export default class FormChangesHandlerService implements Handler<void, void> {
-    constructor(private form: HTMLFormElement, private storageService: StorageService) { }
+    constructor(private form: HTMLFormElement, private storageProxy: StorageProxy) { }
 
     handle(next: HandlerNextCallback<void, void>) {
         const changeDetectionQueue = new ChangeDetectionQueue<Event>({ debounceTime: 500 });
@@ -33,7 +32,7 @@ export default class FormChangesHandlerService implements Handler<void, void> {
             return Promise.resolve(value);
         }
 
-        this.storageService.set(StorageKeys.formData, value);
+        this.storageProxy.set(StorageKeys.formData, value);
         return Promise.resolve();
     }
 }

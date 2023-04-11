@@ -1,14 +1,9 @@
-import { DancerInformations } from "../domain";
-import { parseStringToDancerInformations, StorageKeys } from "../utils";
+import { parseStringToDancerInformations, StorageKeys, StorageProxy, StorageItems } from "../utils";
 
-interface StorageItems {
-    [StorageKeys.formData]: DancerInformations;
-}
-
-export default class StorageService {
+export default class StorageService implements StorageProxy {
     constructor(private storage: Storage) { }
 
-    get<K extends keyof StorageItems>(key: K): StorageItems[K] | null {
+    get<K extends keyof StorageItems>(key: K) {
         const formatedKey = this.formatStorageItemKey(key);
         const encodedValue = this.storage.getItem(formatedKey);
         if (!encodedValue) {

@@ -21,14 +21,12 @@ export const fillFormIfNeeded = (storageService: StorageService) => (form: HTMLF
     }
 }
 
-
 export const translateFormToDancerInformations = (form: HTMLFormElement) => {
     const data: DancerInformations = {
         lastName: '',
         firstName: '',
         address: '',
         city: '',
-        country: '',
         postalCode: '',
         civility: Civility.MRS,
         email: '',

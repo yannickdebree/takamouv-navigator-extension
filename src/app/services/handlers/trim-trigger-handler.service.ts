@@ -1,9 +1,8 @@
 import { MissingDomElementError } from "../../errors";
-import { Handler, HandlerNextCallback, StorageKeys } from "../../utils";
-import StorageService from "../storage.service";
+import { Handler, HandlerNextCallback, StorageKeys, StorageProxy } from "../../utils";
 
 export default class TrimTriggeHandlerService implements Handler<void, void> {
-    constructor(private document: Document, private form: HTMLFormElement, private storageService: StorageService) { }
+    constructor(private document: Document, private form: HTMLFormElement, private storageProxy: StorageProxy) { }
 
     handle(next: HandlerNextCallback<void, void>) {
         const querySelector = "#trim-trigger"
@@ -19,7 +18,7 @@ export default class TrimTriggeHandlerService implements Handler<void, void> {
 
     resolve() {
         this.form.reset();
-        this.storageService.delete(StorageKeys.formData);
+        this.storageProxy.delete(StorageKeys.formData);
         return Promise.resolve();
     }
 }

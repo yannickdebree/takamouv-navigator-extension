@@ -1,22 +1,26 @@
-import { AutocompletionService, FormChangesHandlerService, StorageService, TrimTriggeHandlerService, FormSubmitHandlerService } from "../services";
+import { FormChangesHandlerService, StorageService, TrimTriggeHandlerService, FormSubmitHandlerService } from "../services";
+import { navigatorProxyFactory } from "./navigators";
 import { Handler } from "./types";
 
-export const startHandlers = (storageService: StorageService) => async (form: HTMLFormElement) => {
-    const autocompletionService = new AutocompletionService(document);
+export const startHandlers = (storageService: StorageService) => (form: HTMLFormElement) => {
+    const navigatorProxy = navigatorProxyFactory();
+
     const handlers: Handler<unknown, void | Error>[] = [
         new FormChangesHandlerService(form, storageService),
         new TrimTriggeHandlerService(document, form, storageService),
-        new FormSubmitHandlerService(form, storageService, autocompletionService)
+        new FormSubmitHandlerService(form, storageService, navigatorProxy)
     ];
-    for (const handler of handlers) {
-        const result = handler.handle(async (data) => {
-            const resolution = await handler.resolve(data);
-            if (resolution instanceof Error) {
-                return resolution;
+    return new Promise<void | Error>((resolve) => {
+        for (const handler of handlers) {
+            const result = handler.handle(async (data) => {
+                const resolution = await handler.resolve(data);
+                if (resolution instanceof Error) {
+                    return resolve(resolution);
+                }
+            });
+            if (result instanceof Error) {
+                return resolve(result);
             }
-        });
-        if (result instanceof Error) {
-            return result;
         }
-    }
+    })
 }
