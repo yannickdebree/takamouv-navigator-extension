@@ -1,4 +1,4 @@
-import { DancerInformations, Civility, Status } from "../domain";
+import { DancerInformations, Civility } from "../domain";
 import { MissingDomElementError } from "../errors";
 import { StorageService } from "../services";
 import { StorageKeys } from "./types";
@@ -31,8 +31,7 @@ export const translateFormToDancerInformations = (form: HTMLFormElement) => {
         civility: Civility.MRS,
         email: '',
         memberCode: '',
-        phoneNumber: '',
-        status: Status.individual
+        phoneNumber: ''
     }
     const formData = new FormData(form);
 

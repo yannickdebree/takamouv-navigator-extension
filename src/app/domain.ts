@@ -3,11 +3,6 @@ export enum Civility {
     MR = 'mr'
 }
 
-export enum Status {
-    individual = 'individual',
-    organism = 'organism'
-}
-
 export type DancerInformations = {
     lastName: string;
     firstName: string;
@@ -18,5 +13,4 @@ export type DancerInformations = {
     city: string;
     phoneNumber: string;
     memberCode: string;
-    status: Status;
 }
