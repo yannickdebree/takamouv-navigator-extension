@@ -19,18 +19,12 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
     }
 
     const setCountryAsDefaultValue = () => {
-        const countrySelectQuerySelector = '#F09_9_1';
-        const countrySelectElement = document.querySelector<HTMLSelectElement>(countrySelectQuerySelector);
-        if (!countrySelectElement) {
-            return new MissingDomElementError(countrySelectQuerySelector);
+        const defaultCountryListItemQuerySelector = '.nice-select.country.formitem [data-value="66"]';
+        const defaultCountryListItem = document.querySelector<HTMLLIElement>(defaultCountryListItemQuerySelector);
+        if (!defaultCountryListItem) {
+            return new MissingDomElementError(defaultCountryListItemQuerySelector);
         }
-        countrySelectElement.value = "66";
-        const countrySelectSpanQuerySelector = '.nice-select.country.formitem span.current';
-        const countrySelectSpan = document.querySelector<HTMLSpanElement>(countrySelectSpanQuerySelector);
-        if (!countrySelectSpan) {
-            return new MissingDomElementError(countrySelectSpanQuerySelector);
-        }
-        countrySelectSpan.innerText = "France";
+        defaultCountryListItem.click();
     };
 
     const setStatusAsDefaultValue = () => {
@@ -85,9 +79,9 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
     }
 
     return wrapActions([
-        setFieldsFromUserData,
         setCountryAsDefaultValue,
         setStatusAsDefaultValue,
+        setFieldsFromUserData,
         setCivilityFromUserData
     ]);
 }
