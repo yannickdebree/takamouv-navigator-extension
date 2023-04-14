@@ -2,7 +2,7 @@ import { MonitoringService, StorageService } from "./services";
 import { fillFormIfNeeded, startHandlers } from "./utils";
 import { MissingDomElementError } from "./errors";
 
-async function main() {
+async function main(): Promise<void> {
     const monitoringService = new MonitoringService(document, console);
 
     const form = document.querySelector('form');

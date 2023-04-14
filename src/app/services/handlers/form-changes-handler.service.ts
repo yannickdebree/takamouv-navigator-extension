@@ -1,9 +1,9 @@
-import { ChangeDetectionQueue, Handler, HandlerNextCallback, StorageKeys, StorageProxy, translateFormToDancerInformations } from "../../utils";
+import { ChangeDetectionQueue, Failable, Handler, HandlerNextCallback, StorageKeys, StorageProxy, translateFormToDancerInformations } from "../../utils";
 
 export default class FormChangesHandlerService implements Handler<void, void> {
     constructor(private form: HTMLFormElement, private storageProxy: StorageProxy) { }
 
-    handle(next: HandlerNextCallback<void, void>) {
+    handle(next: HandlerNextCallback<void, void>): Failable {
         const changeDetectionQueue = new ChangeDetectionQueue<Event>({ debounceTime: 500 });
 
         this.form.addEventListener('change', event => {
@@ -26,12 +26,8 @@ export default class FormChangesHandlerService implements Handler<void, void> {
         });
     }
 
-    resolve() {
+    resolve(): Promise<Failable> {
         const value = translateFormToDancerInformations(this.form);
-        if (value instanceof Error) {
-            return Promise.resolve(value);
-        }
-
         this.storageProxy.set(StorageKeys.formData, value);
         return Promise.resolve();
     }

@@ -18,9 +18,9 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
         }
     }
 
-    const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+    const wait = (timeout: number): Promise<void> => new Promise(resolve => setTimeout(resolve, timeout))
 
-    const setCountryAsDefaultValue = () => {
+    const setCountryAsDefaultValue = (): Promise<void> => {
         const defaultCountryListItemQuerySelector = '.nice-select.country.formitem [data-value="66"]';
         const defaultCountryListItem = document.querySelector<HTMLLIElement>(defaultCountryListItemQuerySelector);
         if (!defaultCountryListItem) {
@@ -30,7 +30,7 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
         return Promise.resolve();
     };
 
-    const setStatusAsDefaultValue = () => {
+    const setStatusAsDefaultValue = (): Promise<void> => {
         const statusInputQuerySelector = '[for="P2_PERSONNEPHYSIQUE_0"]';
         const statusInputElement = document.querySelector<HTMLLabelElement>(statusInputQuerySelector);
         if (!statusInputElement) {
@@ -40,9 +40,9 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
         return Promise.resolve();
     }
 
-    const timeOut = 100;
+    const globalTimeOut = 100;
 
-    const setFieldsFromUserData = async () => {
+    const setFieldsFromUserData = async (): Promise<void> => {
         for (let querySelector of Object.keys(inputElementsMapping)) {
             const inputElement = document.querySelector<HTMLInputElement>(querySelector);
 
@@ -53,11 +53,11 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
             inputElement.value = (dancerInformations as any)[inputElementsMapping[querySelector]];
             inputElement.dispatchEvent(new Event("change"))
 
-            await wait(timeOut);
+            await wait(globalTimeOut);
         }
     }
 
-    const setCivilityFromUserData = () => {
+    const setCivilityFromUserData = (): Promise<void> => {
         const mrsInputQuerySelector = '[for="F04_4_1_0"]';
         const mrsInputElement = document.querySelector<HTMLLabelElement>(mrsInputQuerySelector);
         if (!mrsInputElement) {
@@ -78,10 +78,10 @@ export function autocompleteTrainingForm(dancerInformations: DancerInformations)
         return Promise.resolve();
     }
 
-    const wrapActions = async (actions: Array<() => Promise<void>>) => {
+    const wrapActions = async (actions: Array<() => Promise<void>>): Promise<void> => {
         for (const action of actions) {
             await action();
-            await wait(timeOut);
+            await wait(globalTimeOut);
         }
     }
 

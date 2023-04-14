@@ -1,10 +1,12 @@
 import { DancerInformations } from "../domain";
 
+export type Failable<T = void> = T | Error;
+
 export type HandlerNextCallback<H, R> = (data: H) => Promise<R>;
 
 export interface Handler<H, R> {
-    handle(next: HandlerNextCallback<H, R>): void | Error;
-    resolve(data: H): Promise<R | Error>;
+    handle(next: HandlerNextCallback<H, R>): Failable;
+    resolve(data: H): Promise<Failable<R>>;
 }
 
 export enum StorageKeys {
@@ -28,5 +30,5 @@ export type CommandRunnerParams<Args extends any[]> = {
 }
 
 export interface NavigatorProxy {
-    runCommand<Args extends any[]>(commandRunnerParams: CommandRunnerParams<Args>): Promise<void | Error>;
+    runCommand<Args extends any[]>(commandRunnerParams: CommandRunnerParams<Args>): Promise<Failable>;
 }

@@ -1,6 +1,6 @@
 import { DancerInformations } from "../domain";
 
-export function parseStringToDancerInformations(dataAsString: string) {
+export function parseStringToDancerInformations(dataAsString: string): DancerInformations {
     const { lastName, firstName, address, postalCode, city, civility, email, memberCode, phoneNumber } = JSON.parse(dataAsString);
     return {
         lastName,
@@ -11,6 +11,6 @@ export function parseStringToDancerInformations(dataAsString: string) {
         civility,
         email,
         memberCode,
-        phoneNumber,
-    } as DancerInformations
+        phoneNumber
+    }
 }

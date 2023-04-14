@@ -6,11 +6,11 @@ export default class ChangeDetectionQueue<Change> {
 
     constructor(private options: { debounceTime: number }) { }
 
-    onChangesDetected(callback: OnChangesDetectedCallback<Change>) {
+    onChangesDetected(callback: OnChangesDetectedCallback<Change>): void {
         this.callbacks.push(callback);
     }
 
-    registerChangeDetection(change: Change) {
+    registerChangeDetection(change: Change): void {
         if (this.timeOut) {
             clearTimeout(this.timeOut);
         }

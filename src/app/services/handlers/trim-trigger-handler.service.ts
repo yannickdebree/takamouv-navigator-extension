@@ -1,10 +1,10 @@
 import { MissingDomElementError } from "../../errors";
-import { Handler, HandlerNextCallback, StorageKeys, StorageProxy } from "../../utils";
+import { Failable, Handler, HandlerNextCallback, StorageKeys, StorageProxy } from "../../utils";
 
 export default class TrimTriggeHandlerService implements Handler<void, void> {
     constructor(private document: Document, private form: HTMLFormElement, private storageProxy: StorageProxy) { }
 
-    handle(next: HandlerNextCallback<void, void>) {
+    handle(next: HandlerNextCallback<void, void>): Failable {
         const querySelector = "#trim-trigger"
         const trimButton = this.document.querySelector<HTMLButtonElement>(querySelector);
 
@@ -16,7 +16,7 @@ export default class TrimTriggeHandlerService implements Handler<void, void> {
         });
     }
 
-    resolve() {
+    resolve(): Promise<Failable> {
         this.form.reset();
         this.storageProxy.delete(StorageKeys.formData);
         return Promise.resolve();

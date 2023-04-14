@@ -1,9 +1,9 @@
 import { DancerInformations, Civility } from "../domain";
 import { MissingDomElementError } from "../errors";
 import { StorageService } from "../services";
-import { StorageKeys } from "./types";
+import { Failable, StorageKeys } from "./types";
 
-const fillFormFromData = (form: HTMLFormElement) => (dancerInformations: DancerInformations) => {
+const fillFormFromData = (form: HTMLFormElement) => (dancerInformations: DancerInformations): Failable => {
     for (const key of Object.keys(dancerInformations)) {
         const querySelector = `[name="${key}"]`;
         const field = form.querySelector<HTMLInputElement>(querySelector);
@@ -14,14 +14,14 @@ const fillFormFromData = (form: HTMLFormElement) => (dancerInformations: DancerI
     }
 }
 
-export const fillFormIfNeeded = (storageService: StorageService) => (form: HTMLFormElement) => {
+export const fillFormIfNeeded = (storageService: StorageService) => (form: HTMLFormElement): Failable => {
     const dancerInformations = storageService.get(StorageKeys.formData);
     if (dancerInformations) {
         return fillFormFromData(form)(dancerInformations);
     }
 }
 
-export const translateFormToDancerInformations = (form: HTMLFormElement) => {
+export const translateFormToDancerInformations = (form: HTMLFormElement): DancerInformations => {
     const data: DancerInformations = {
         lastName: '',
         firstName: '',

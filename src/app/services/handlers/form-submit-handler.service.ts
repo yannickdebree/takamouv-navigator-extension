@@ -1,4 +1,4 @@
-import { autocompleteTrainingForm, Handler, HandlerNextCallback, NavigatorProxy, StorageKeys, StorageProxy } from "../../utils";
+import { autocompleteTrainingForm, Failable, Handler, HandlerNextCallback, NavigatorProxy, StorageKeys, StorageProxy } from "../../utils";
 
 export default class FormSubmitHandlerService implements Handler<void, void> {
     constructor(
@@ -7,14 +7,14 @@ export default class FormSubmitHandlerService implements Handler<void, void> {
         private navigatorProxy: NavigatorProxy
     ) { }
 
-    handle(next: HandlerNextCallback<void, void>) {
+    handle(next: HandlerNextCallback<void, void>): void {
         this.form.addEventListener('submit', async event => {
             event.preventDefault();
             next();
         });
     }
 
-    async resolve() {
+    async resolve(): Promise<Failable> {
         const dancerInformations = this.storageProxy.get(StorageKeys.formData);
         if (dancerInformations) {
             return this.navigatorProxy.runCommand({

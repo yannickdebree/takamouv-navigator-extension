@@ -1,11 +1,11 @@
-import { CommandRunnerParams, NavigatorProxy } from "../../types";
+import { CommandRunnerParams, Failable, NavigatorProxy } from "../../types";
 
 export default class ChromeNavigatorProxy implements NavigatorProxy {
-    static isAvailable() {
+    static isAvailable(): boolean {
         return !!chrome.tabs;
     }
 
-    async runCommand<Args extends any[]>({ func, args }: CommandRunnerParams<Args>) {
+    async runCommand<Args extends any[]>({ func, args }: CommandRunnerParams<Args>): Promise<Failable> {
         if (!ChromeNavigatorProxy.isAvailable()) {
             return Promise.resolve(new Error('"tabs" is not available in "chrome" object.'));
         }
@@ -17,7 +17,7 @@ export default class ChromeNavigatorProxy implements NavigatorProxy {
         if (!currentTabId) {
             return Promise.resolve(new Error("Current tab is not available"));
         }
-        chrome.scripting.executeScript({
+        await chrome.scripting.executeScript({
             target: { tabId: currentTabId },
             func,
             args
